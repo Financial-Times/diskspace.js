@@ -13,23 +13,16 @@ To set up diskspace.js on your Node.js server use npm.
 ## Example Usage ##
 ```
 var diskspace = require('diskspace');
-diskspace.check('C', function (total, free, status)
+diskspace.check('C', function (err, result)
 {
-	Your code here
+	console.log("Bytes free: ", result.free, " out of ", result.total);
 });
 ```
 On Windows you change C to the drive letter you want to check. On Linux you use the mount path eg `/`.
 
-`total` is how much the drive has totally.
-`free` is how much free space you have.
-`status` isn't really that useful unless you want to debug.
-
-## Status codes: ##
-
-- NOTFOUND - Disk was not found, the space values will be 0
-- READY - The drive is ready
-- NOTREADY - The drive isn't ready, the space values will be 0
-- STDERR - some error, the output of it was logged to the console.
+* `total` is how much the drive has totally.
+* `free` is how much free space you have.
+* `status` (optional) isn't really that useful unless you want to debug.
 
 ##Other Notes##
 This will fail on hard drives bigger than 9 petabytes. Thanks [@SteveStreza](https://twitter.com/#!/SteveStreza) [[1]](https://twitter.com/#!/SteveStreza/status/197939419842482176) [[2]](https://twitter.com/#!/SteveStreza/status/197939715993907200)
