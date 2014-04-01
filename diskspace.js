@@ -2,7 +2,12 @@
 var os = require('os');
 var child_process = require('child_process');
 
-function check(drive, callback) {
+function check(drive, options, callback) {
+	if (callback === undefined) {
+		callback = options;
+		options = {}
+	}
+
 	function fail(msg, statusCode) {
 		var err = new Error(msg);
 		err.statusCode = statusCode;
@@ -11,8 +16,10 @@ function check(drive, callback) {
 
 	if (!drive) return callback(fail('Drive argument is required', 'NOTFOUND'));
 
+	var exec = options.exec || child_process.exec.bind(child_process);
 	if (os.type() == 'Windows_NT') {
-		child_process.exec('"' + __dirname + '\\drivespace.exe" drive-' + drive, function(error, stdout, stderr) {
+		var drivespacePath = options.drivespacePath || __dirname + '\\drivespace.exe';
+		exec('"' + drivespacePath + '" drive-' + drive, function(error, stdout, stderr) {
 			if (error) return callback(fail(stderr, error));
 
 			var disk_info = stdout.split(',');
@@ -24,7 +31,7 @@ function check(drive, callback) {
 			});
 		});
 	} else {
-		child_process.exec("df -k '" + drive.replace(/'/g,"'\\''") + "'", function(error, stdout, stderr) {
+		exec("df -k '" + drive.replace(/'/g,"'\\''") + "'", function(error, stdout, stderr) {
 			if (error) return callback(fail(stderr, error));
 
 			var lines = stdout.trim().split("\n");
