@@ -31,7 +31,7 @@ function check(drive, options, callback) {
 			});
 		});
 	} else {
-		exec("df -k " + (options.inodes ? '-i' : '') + "'" + drive.replace(/'/g,"'\\''") + "'", function(error, stdout, stderr) {
+		exec("df -k " + (options.inodes ? '-i ' : '') + "'" + drive.replace(/'/g,"'\\''") + "'", function(error, stdout, stderr) {
 			if (error) return callback(fail(stderr, error));
 
 			// assume default shell tab is 8
