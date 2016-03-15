@@ -67,11 +67,11 @@ function check(drive, options, callback) {
 			}
 
 			var results = {
-				total: getValue(headersLine, dataLine, "1(?:024|K)?-?blocks"),
-				used: getValue(headersLine, dataLine, "used"),
-				free: getValue(headersLine, dataLine, "avail(?:able)?"),
-				ifree: getValue(headersLine, dataLine, "ifree"),
-				iused: getValue(headersLine, dataLine, "iused"),
+				total: (!options.inodes ? getValue(headersLine, dataLine, "1(?:024|K)?-?blocks") : undefined),
+				used: (!options.inodes ? getValue(headersLine, dataLine, "used") : undefined),
+				free: (!options.inodes ? getValue(headersLine, dataLine, "avail(?:able)?") : undefined),
+				iused: (options.inodes ? getValue(headersLine, dataLine, "used") : undefined),
+				ifree: (options.inodes ? getValue(headersLine, dataLine, "avail(?:able)?") : undefined),
 			};
 
 			if (results.total === undefined && results.used !== undefined && results.free !== undefined ) {
